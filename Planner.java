@@ -52,13 +52,15 @@ public class Planner {
         return temp;
     }
     
-    public void addCourse(Course newCourse){
+    public boolean addCourse(Course newCourse){
         ArrayList<Boolean> temp = preReqsMet(newCourse);
         if(temp.contains(false)){
             addPreReqNotMet(newCourse);
+            return false;
         }
         else{
             addPreReqMet(newCourse);
+            return true;
         }
     }
 

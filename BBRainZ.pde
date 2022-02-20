@@ -1,7 +1,7 @@
 import java.io.*;
 
 int boxSizeX = 70;
-int boxSizeY = 20;
+int boxSizeY = 15;
 color green1 = #259B1E;
 color green2 = #0EE500;
 color blue1 = #344E93;
@@ -25,8 +25,8 @@ ArrayList<Box> semester7;
 ArrayList<Box> semester8;
 ArrayList<Box> prereqMet;
 ArrayList<Box> prereqNotMet;
+ArrayList<Box> allSemesters;
 PShape sendButton;
-Planner planner;
 
 void setup(){
   size(1600, 900);
@@ -56,12 +56,12 @@ void setup(){
   }
   int[] area1 = new int[4];
   area1[0] = 80;
-  area1[1] = 600;
+  area1[1] = 760;
   area1[2] = 500;
   area1[3] = 850;
   areas.add(area1);
   int[] area2 = new int[4];
-  area2[0] = 700;
+  area2[0] = 840;
   area2[1] = 1520;
   area2[2] = 500;
   area2[3] = 850;
@@ -80,6 +80,7 @@ void setup(){
   prereqMet = new ArrayList<>();
   prereqNotMet = new ArrayList<>();
   allBuckets = new ArrayList<>();
+  allSemesters = new ArrayList<>();
   allBuckets.add(semester1);
   allBuckets.add(semester2);
   allBuckets.add(semester3);
@@ -90,8 +91,7 @@ void setup(){
   allBuckets.add(semester8);
   allBuckets.add(prereqMet);
   allBuckets.add(prereqNotMet);
-  
-  Planner planner = new Planner();
+
   CourseParser parser = new CourseParser();
   try{
       parser.parseCourse();
@@ -100,30 +100,108 @@ void setup(){
   }
   
   ArrayList<Course> courses = parser.getCourses();
-  planner.addTakingCourse(courses.get(0));
+
   Box box0 = new Box("CTP S " + courses.get(0).getNumber(), courses.get(0), true, green1, green2);
   semester1.add(box0);
+  allSemesters.add(box0);
   boxes.add(box0);
-  planner.addTakingCourse(courses.get(3));
+
   Box box3 = new Box("CTP S " + courses.get(3).getNumber(), courses.get(3), true, green1, green2);
   semester2.add(box3);
+  allSemesters.add(box3);
   boxes.add(box3);
-  planner.addTakingCourse(courses.get(4));
+
   Box box4 = new Box("CTP S " + courses.get(4).getNumber(), courses.get(4), true, green1, green2);
   semester3.add(box4);
+  allSemesters.add(box4);
   boxes.add(box4);
-  planner.addTakingCourse(courses.get(8));
+
   Box box8 = new Box("CTP S " + courses.get(8).getNumber(), courses.get(8), true, blue1, blue2);
   semester5.add(box8);
+  allSemesters.add(box8);
   boxes.add(box8);
-  planner.addTakingCourse(courses.get(9));
+
   Box box9 = new Box("CTP S " + courses.get(9).getNumber(), courses.get(9), true, blue1, blue2);
   semester5.add(box9);
+  allSemesters.add(box9);
   boxes.add(box9);
-  planner.addTakingCourse(courses.get(10));
+  
   Box box10 = new Box("CTP S " + courses.get(10).getNumber(), courses.get(10), false, yellow1, yellow2);
   semester6.add(box10);
+  allSemesters.add(box10);
   boxes.add(box10);
+  
+  courses.remove(10);
+  courses.remove(9);
+  courses.remove(8);
+  courses.remove(4);
+  courses.remove(3);
+  courses.remove(0);
+  
+  for(Course course : courses){
+    
+    color color1 = 0;
+    color color2 = 0;
+    if(course.getNumber() / 100 == 1){
+      color1 = green1;
+      color2 = green2;
+    }
+    else if(course.getNumber() / 100 == 2){
+      color1 = blue1;
+      color2 = blue2;
+    }
+    else if(course.getNumber() / 100 == 3){
+      if(course.getNumber() == 360 || course.getNumber() == 370){
+        color1 = red1;
+        color2 = red2;
+      }
+      else{
+        color1 = yellow1;
+        color2 = yellow2;
+      }
+    }
+    else if(course.getNumber() / 100 == 4){
+      color1 = orange1;
+      color2 = orange2;
+    }
+    Box box = new Box("CTP S " + course.getNumber(), course, true, color1, color2);
+    boxes.add(box);
+    int met = 0;
+    for(int i = 0; i < course.getPreReqs().size(); i++){
+      ArrayList<Integer> andPreReq = course.getPreReqs().get(i);
+      boolean flag = false;
+      for(int j = 0; j < andPreReq.size(); j++){
+        int orPreReq = andPreReq.get(j);
+        flag = myContains(orPreReq);
+      }
+      if(flag){
+        met++;
+      }
+    }
+    if(met == course.getPreReqs().size()){
+      prereqMet.add(box);
+      box.setLocked(false);
+    }
+    else{
+      prereqNotMet.add(box);
+    }
+  }
+  
+  for(int i = 0; i < allBuckets.size(); i++){
+    ArrayList<Box> bucket = allBuckets.get(i);
+    for(int j = 0; j < bucket.size(); j++){
+      Box box = bucket.get(j);
+      if(bucket == prereqMet){
+        box.setCoord(170 + 180 * (j / 6), 580 + (j % 6) * 40);
+      }
+      else if(bucket == prereqNotMet){
+        box.setCoord(930 + 180 * (j / 6), 580 + (j % 6) * 40);
+      }
+      else{
+        box.setCoord(170 + 180 * i, 180 + j * 40);
+      }
+    }
+  }
 }
 
 void draw() { 
@@ -136,8 +214,8 @@ void draw() {
   fill(90);
   rect(1250, 275, 270, 175);
   fill(100);
-  rect(340, 675, 260, 175);
-  rect(1110, 675, 410, 175);
+  rect(420, 675, 340, 175);
+  rect(1180, 675, 340, 175);
 
   shape(sendButton, 0, 0);
   
@@ -165,8 +243,8 @@ void draw() {
   rectMode(RADIUS);
   
   line(80, 150, 1520, 150);
-  line(80, 550, 600, 550);
-  line(700, 550, 1520, 550);
+  line(80, 550, 760, 550);
+  line(840, 550, 1520, 550);
   
   
   textSize(25);
@@ -179,8 +257,8 @@ void draw() {
   text("2022 Spring", 1070, 130);
   text("2022 Fall", 1250, 130);
   text("2023 Spring", 1430, 130);
-  text("Courses with pre-requisites met", 340, 530);
-  text("Courses with pre-requisites not met", 1110, 530);
+  text("Courses with pre-requisites met", 420, 530);
+  text("Courses with pre-requisites not met", 1180, 530);
   
   textSize(50);
   text("Course Planner", 800, 60);
@@ -188,21 +266,22 @@ void draw() {
   textSize(30);
   text("Send to advisor", 1370, 60);
   
-  for(int i = 0; i < allBuckets.size() && !mousePressed; i++){
-    ArrayList<Box> bucket = allBuckets.get(i);
-    for(int j = 0; j < bucket.size(); j++){
-      Box box = bucket.get(j);
-      if(bucket == prereqMet){
-        box.setCoord(170 + 180 * (j / 6), 580 + (j % 6) * 50);
-      }
-      else if(bucket == prereqNotMet){
-        box.setCoord(790 + 180 * (j / 6), 580 + (j % 6) * 50);
-      }
-      else{
-        box.setCoord(170 + 180 * i, 180 + j * 50);
+  for(int i = 5; i < allBuckets.size(); i++){
+      ArrayList<Box> bucket = allBuckets.get(i);
+      for(int j = 0; j < bucket.size(); j++){
+        Box box = bucket.get(j);
+        if(bucket == prereqMet){
+          box.setCoord(170 + 180 * (j / 6), 580 + (j % 6) * 40);
+        }
+        else if(bucket == prereqNotMet){
+          box.setCoord(930 + 180 * (j / 6), 580 + (j % 6) * 40);
+        }
+        else{
+          box.setCoord(170 + 180 * i, 180 + j * 40);
+        }
       }
     }
-  }
+    
   for(Box box:boxes){
     box.display();
   }
@@ -210,12 +289,14 @@ void draw() {
 }
 void mouseClicked(){
   for(Box box:boxes){
-    box.myMouseClicked();
+    if(box.getOver())
+      box.myMouseClicked();
   }
 }
 void mousePressed(){
   for(Box box:boxes){
-    box.myMousePressed();
+    if(box.getOver())
+      box.myMousePressed();
   }
   if (mouseX > 1470 && mouseX < 1580 && 
       mouseY > 10 && mouseY < 85) {
@@ -223,9 +304,10 @@ void mousePressed(){
     delay(3000);
     try{
       ProcessBuilder builder = new ProcessBuilder(
-          "cmd.exe", "/c", "python3 C:\\Users\\bensy\\Desktop\\BBRainZ\\emailer.py Ben 11776385 bensyliu@gmail.com shuyan.liu1@wsu.edu");
+          "cmd.exe", "/c", "python3 C:\\Users\\bensy\\Desktop\\BBRainZ\\emailer.py Ben 11776385 zayn.abou-harb@wsu.edu shuyan.liu1@wsu.edu");
       builder.redirectErrorStream(true);
       Process p = builder.start();
+      println("Sent email");
     }
     catch (IOException e){
       println("Error calling python code");
@@ -236,12 +318,58 @@ void mousePressed(){
 
 void mouseDragged() {
   for(Box box:boxes){
-    box.myMouseDragged();
+    if(box.getOver())
+      box.myMouseDragged();
   }
 }
 
 void mouseReleased() {
   for(Box box:boxes){
-    box.myMouseReleased();
+    if(box.getOver())
+      box.myMouseReleased();
   }
+  
+  ArrayList<Box> temp = new ArrayList<>();
+  for(Box box : prereqMet){
+    temp.add(box);
+  }
+  for(Box box : prereqNotMet){
+    temp.add(box);
+  }
+  prereqMet.clear();
+  prereqNotMet.clear();
+  
+  for(Box box : temp){
+    Course course = box.getCourse();
+    int met = 0;
+    for(int i = 0; i < course.getPreReqs().size(); i++){
+      ArrayList<Integer> andPreReq = course.getPreReqs().get(i);
+      boolean flag = false;
+      for(int j = 0; j < andPreReq.size(); j++){
+        int orPreReq = andPreReq.get(j);
+        flag = myContains(orPreReq);
+      }
+      if(flag){
+        met++;
+      }
+    }
+    if(met == course.getPreReqs().size()){
+      prereqMet.add(box);
+      box.setLocked(false);
+    }
+    else{
+      prereqNotMet.add(box);
+      box.setLocked(true);
+    }
+  }
+}
+
+boolean myContains(int x){
+  boolean flag = false;
+  for(Box box : allSemesters){
+    if(box.getCourse().getNumber() == x){
+      flag = true;
+    }
+  }
+  return flag;
 }

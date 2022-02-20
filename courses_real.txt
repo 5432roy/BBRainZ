@@ -28,31 +28,6 @@
 427,Applied Cyber Security,327
 428,Advanced Cyber Security,327
 430,Numerical Analysis,121%131
-434,Neural Network Design and Application,121%131
-437,Introduction to Machine Learning,215%223%233
-438,Scientific Visualization,223%233,224
-439,Critical Infrastructure Security
-440,Artificial Intelligence,223%233
-442,Computer Graphics,223,224
-443,HumanComputer Interaction,223%233
-451,Introduction to Database Systems,215%223%233
-452,Compiler Design,317,355
-453,Graph Theory
-455,Introduction to Computer Networks,360%370
-460,Operating Systems and Computer Architecture,360
-464,Distributed Systems Concepts and Programming,223%233
-466,Embedded Systems,360
-471,Computational Genomics,223%233,350
-475,Data Science,215%223%233
-476,Software Construction and Maintenance,322
-478,Software Process and Management,223%233
-479,Mobile Application Development,223%233
-481,Python Software Construction,223,224%360
-483,Topics in Computer Science
-484,Software Requirements,322
-485,Gerontechnology I,215%223%233
-486,Gerontechnology II,215%223%233
-487,Software Design and Architecture,321,322
 488,Professional Practice Coop/Internship
 489,Web Development,322
 490,Work Study Internship

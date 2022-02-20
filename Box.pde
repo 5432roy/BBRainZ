@@ -7,6 +7,7 @@ public class Box{
   private boolean overBox;
   private boolean locked;
   private boolean draggable;
+  private boolean removable;
   private float xOffset; 
   private float yOffset;
   private color boxColor1;
@@ -20,6 +21,7 @@ public class Box{
     this.overBox = false;
     this.locked = locked;
     this.draggable = false;
+    this.removable = true;
     this.xOffset = 0.0;
     this.yOffset = 0.0;
     this.boxColor1 = boxColor1;
@@ -33,6 +35,14 @@ public class Box{
   
   public Course getCourse(){
     return course;
+  }
+  
+  public boolean getOver(){
+    return overBox;
+  }
+  
+  public void setLocked(boolean locked){
+    this.locked = locked;
   }
   
   public void display(){
@@ -50,30 +60,13 @@ public class Box{
     fill(boxColor1);
     strokeWeight(5);
     rect(x, y, boxSizeX, boxSizeY, 20);
-    textSize(25);
+    textSize(22);
     fill(255);
     text(name, x,y+10);
   }
   
   public void myMouseClicked(){
-    boolean flag = true;
-    for(int i = 0; i < areas.size() && flag && !locked; i++){
-      int[] area = areas.get(i);
-      if(x > area[0] && x < area[1] && 
-         y > area[2] && y < area[3]){
-         allBuckets.get(i).remove(this);
-         if(i == 8){
-           planner.removePreReqMet(course);
-         }
-         else if(i == 9){
-           planner.removePreReqNotMet(course);
-         }
-         else{
-           planner.removeTakingCourse(course);
-         }
-         flag = false;
-      }
-    }
+    
   }
   
   public void myMousePressed(){
@@ -84,6 +77,20 @@ public class Box{
     }
     xOffset = mouseX-x; 
     yOffset = mouseY-y;
+    
+    boolean flag = true;
+    for(int i = 5; i < areas.size() && flag && !locked && removable; i++){
+      int[] area = areas.get(i);
+      if(x > area[0] && x < area[1] && 
+         y > area[2] && y < area[3]){
+         allBuckets.get(i).remove(this);
+         if(i < 8){
+           allSemesters.remove(this);
+         }
+         flag = false;
+         removable = false;
+      }
+    }
   }
   
   public void myMouseDragged(){
@@ -97,23 +104,19 @@ public class Box{
     draggable = false;
     
     boolean flag = true;
-    for(int i = 0; i < areas.size() && flag && !locked; i++){
+    for(int i = 5; i < areas.size() && flag && !locked; i++){
       int[] area = areas.get(i);
       if(x > area[0] && x < area[1] && 
          y > area[2] && y < area[3]){
          allBuckets.get(i).add(this);
-         if(i == 8){
-           planner.addPreReqMet(course);
-         }
-         else if(i == 9){
-           planner.addPreReqNotMet(course);
-         }
-         else{
-           println(course);
-           planner.addTakingCourse(course);
+         if(i < 8){
+           allSemesters.add(this);
          }
          flag = false;
+         removable = true;
       }
     }
+    
+    
   }
 }

@@ -29,6 +29,13 @@ def getCourses(str):
                 while x[end] != ']':
                     end = end + 1
                 x = x.replace(x[4:end + 1], '')
+            if "Course Prerequisite:" in x:
+                temp = x.split("Course Prerequisite:")
+                keep = temp[0][0:3]
+                for i in range(3, (len(temp[0]))):
+                    if not (temp[0][i].isnumeric() or temp[0][i] == '(' or temp[0][i] == ')' or temp[0][i] == '-'):
+                        keep = keep + temp[0][i]
+                x = keep + "Course Prerequisite:" + temp[1]
             courses.append(x)
             with open('courses.txt', 'a') as f:
                 f.write(x + "\n")

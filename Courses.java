@@ -1,32 +1,34 @@
 
 import java.util.ArrayList;
 
-public class Courses implements Comparable {
+public class Course implements Comparable {
 
-    private final String name;
-    private final int number;
-    private final ArrayList<String> preReqs;
+    private String abbrevName;
+    private String fullName;
+    private int number;
+    private ArrayList<Course> preReqs;
 
-    public Courses(String name, int number, ArrayList<String> preReqs){
-        this.name = name;
+    public Course(String abbrevName, String fullName, int number, ArrayList<Course> preReqs){
+        this.abbrevName = abbrevName;
+        this.fullName = fullName;
         this.number = number;
         this.preReqs = preReqs;
-    }
-
-    public void addCourse(String courseName){
-        preReqs.add(courseName);
-    }
-
-    public void rmCourse (String courseName) {
-        preReqs.remove(courseName);
     }
 
     public int getNumber(){
         return number;
     }
 
-    public String getName() {
-        return name;
+    public String getAbbrevName(){
+        return abbrevName;
+    }
+    
+    public String getFullName(){
+        return fullName;
+    }
+    
+    public ArrayList<Course> getPreReqs(){
+        return preReqs;
     }
 
     @Override
@@ -40,4 +42,3 @@ public class Courses implements Comparable {
     }
 
 }
-

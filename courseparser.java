@@ -12,7 +12,7 @@ public class courseparser {
     for(int i = 0; i < coursesArr.length; i++) {
       String courNum = coursesArr[i].substring(0,3);
       String courName = coursesArr[i].substring(4).split("Course Prerequisite:")[0];
-      Courses c = new Courses(courName, courNum, new ArrayList<String>());
+      Course c = new Course(courName, courNum, new ArrayList<String>());
     }
   }
 }

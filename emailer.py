@@ -10,7 +10,7 @@ from email.utils import make_msgid
 #argv[3] - student address
 #argv[4] - advisor address
 
-FILE_NAME = 'schedule.jpg'
+FILE_NAME = 'C:\\Users\\bensy\\Desktop\\BBRainZ\\schedule.jpg'
 
 sender_address = "bbrainzproject@gmail.com"
 recipient_address = str(sys.argv[4]) + ", " + str(sys.argv[3])

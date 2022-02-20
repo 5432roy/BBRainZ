@@ -1,5 +1,17 @@
-final int boxSizeX = 70;
-final int boxSizeY = 20;
+import java.io.*;
+
+int boxSizeX = 70;
+int boxSizeY = 20;
+color green1 = #259B1E;
+color green2 = #0EE500;
+color blue1 = #344E93;
+color blue2 = #0030EA;
+color yellow1 = #A09D42;
+color yellow2 = #E4F500;
+color orange1 = #B47600;
+color orange2 = #FF8D00;
+color red1 = #FF4646;
+color red2 = #FF0000;
 ArrayList<Box> boxes;
 ArrayList<int[]> areas;
 ArrayList<ArrayList<Box>> allBuckets;
@@ -13,30 +25,25 @@ ArrayList<Box> semester7;
 ArrayList<Box> semester8;
 ArrayList<Box> prereqMet;
 ArrayList<Box> prereqNotMet;
-
-PShape s;
+PShape sendButton;
+Planner planner;
 
 void setup(){
   size(1600, 900);
   textAlign(CENTER);
   rectMode(RADIUS);
   
-  s = createShape();
-  s.beginShape();
-  s.fill(#31BCFF);
-  s.vertex(1485, 10);
-  s.vertex(1565, 45);
-  s.vertex(1485, 80);
-  s.vertex(1485, 50);
-  s.vertex(1535, 45);
-  s.vertex(1485, 40);
-  s.endShape(CLOSE);
+  sendButton = createShape();
+  sendButton.beginShape();
+  sendButton.fill(#31BCFF);
+  sendButton.vertex(1485, 10);
+  sendButton.vertex(1565, 45);
+  sendButton.vertex(1485, 80);
+  sendButton.vertex(1485, 50);
+  sendButton.vertex(1535, 45);
+  sendButton.vertex(1485, 40);
+  sendButton.endShape(CLOSE);
   
-  boxes = new ArrayList<>();
-  Box myBox = new Box("CPT_S 370");
-  boxes.add(myBox);
-  Box myBox1 = new Box("CPT_S 360");
-  boxes.add(myBox1);
   
   areas = new ArrayList<>();
   for(int i = 0; i < 8; i++){
@@ -60,19 +67,7 @@ void setup(){
   area2[3] = 850;
   areas.add(area2);
   
-  InputStream input = createInput("test.txt");
-  String content = "";
-  try{
-    int data = input.read();
-    while (data != -1) {
-      content += char(data);
-      data = input.read();
-    }
-    println(content);
-  }
-  catch (Exception e){
-    println("Error in file input");
-  }
+  boxes = new ArrayList<>();
   
   semester1 = new ArrayList<>();
   semester2 = new ArrayList<>();
@@ -95,6 +90,40 @@ void setup(){
   allBuckets.add(semester8);
   allBuckets.add(prereqMet);
   allBuckets.add(prereqNotMet);
+  
+  Planner planner = new Planner();
+  CourseParser parser = new CourseParser();
+  try{
+      parser.parseCourse();
+  }catch (Exception e){
+      System.out.println("Error in loading file");
+  }
+  
+  ArrayList<Course> courses = parser.getCourses();
+  planner.addTakingCourse(courses.get(0));
+  Box box0 = new Box("CTP S " + courses.get(0).getNumber(), courses.get(0), true, green1, green2);
+  semester1.add(box0);
+  boxes.add(box0);
+  planner.addTakingCourse(courses.get(3));
+  Box box3 = new Box("CTP S " + courses.get(3).getNumber(), courses.get(3), true, green1, green2);
+  semester2.add(box3);
+  boxes.add(box3);
+  planner.addTakingCourse(courses.get(4));
+  Box box4 = new Box("CTP S " + courses.get(4).getNumber(), courses.get(4), true, green1, green2);
+  semester3.add(box4);
+  boxes.add(box4);
+  planner.addTakingCourse(courses.get(8));
+  Box box8 = new Box("CTP S " + courses.get(8).getNumber(), courses.get(8), true, blue1, blue2);
+  semester5.add(box8);
+  boxes.add(box8);
+  planner.addTakingCourse(courses.get(9));
+  Box box9 = new Box("CTP S " + courses.get(9).getNumber(), courses.get(9), true, blue1, blue2);
+  semester5.add(box9);
+  boxes.add(box9);
+  planner.addTakingCourse(courses.get(10));
+  Box box10 = new Box("CTP S " + courses.get(10).getNumber(), courses.get(10), false, yellow1, yellow2);
+  semester6.add(box10);
+  boxes.add(box10);
 }
 
 void draw() { 
@@ -110,7 +139,7 @@ void draw() {
   rect(340, 675, 260, 175);
   rect(1110, 675, 410, 175);
 
-  shape(s, 0, 0);
+  shape(sendButton, 0, 0);
   
   rectMode(CORNERS);
   
@@ -159,15 +188,49 @@ void draw() {
   textSize(30);
   text("Send to advisor", 1370, 60);
   
+  for(int i = 0; i < allBuckets.size() && !mousePressed; i++){
+    ArrayList<Box> bucket = allBuckets.get(i);
+    for(int j = 0; j < bucket.size(); j++){
+      Box box = bucket.get(j);
+      if(bucket == prereqMet){
+        box.setCoord(170 + 180 * (j / 6), 580 + (j % 6) * 50);
+      }
+      else if(bucket == prereqNotMet){
+        box.setCoord(790 + 180 * (j / 6), 580 + (j % 6) * 50);
+      }
+      else{
+        box.setCoord(170 + 180 * i, 180 + j * 50);
+      }
+    }
+  }
   for(Box box:boxes){
     box.display();
   }
   
 }
-
-void mousePressed() {
+void mouseClicked(){
+  for(Box box:boxes){
+    box.myMouseClicked();
+  }
+}
+void mousePressed(){
   for(Box box:boxes){
     box.myMousePressed();
+  }
+  if (mouseX > 1470 && mouseX < 1580 && 
+      mouseY > 10 && mouseY < 85) {
+    save("schedule.jpg");
+    delay(3000);
+    try{
+      ProcessBuilder builder = new ProcessBuilder(
+          "cmd.exe", "/c", "python3 C:\\Users\\bensy\\Desktop\\BBRainZ\\emailer.py Ben 11776385 bensyliu@gmail.com shuyan.liu1@wsu.edu");
+      builder.redirectErrorStream(true);
+      Process p = builder.start();
+    }
+    catch (IOException e){
+      println("Error calling python code");
+    }
+    
   }
 }
 
@@ -180,86 +243,5 @@ void mouseDragged() {
 void mouseReleased() {
   for(Box box:boxes){
     box.myMouseReleased();
-  }
-}
-
-class Box{
-  
-  private String name;
-  private float x;
-  private float y;
-  private boolean overBox;
-  private boolean locked;
-  private boolean draggable;
-  private float xOffset; 
-  private float yOffset;
-  
-  Box(String name){
-    this.name = name;
-    this.x = random(100, 800);
-    this.y = random(100, 800);
-    this.overBox = false;
-    this.locked = false;
-    this.draggable = false;
-    this.xOffset = 0.0;
-    this.yOffset = 0.0;
-  }
-  
-  void setCoord(float newX, float newY){
-    x = newX;
-    y = newY;
-  }
-  
-  void display(){
-    // Test if the cursor is over the box 
-    if (mouseX > x-boxSizeX && mouseX < x+boxSizeX && 
-        mouseY > y-boxSizeY && mouseY < y+boxSizeY) {
-      overBox = true;  
-      if(!draggable) { 
-        stroke(255); 
-      } 
-    } else {
-      stroke(#FF0000);
-      overBox = false;
-    }
-    
-    // Draw the box
-    fill(#FF4646);
-    strokeWeight(5);
-    rect(x, y, boxSizeX, boxSizeY, 20);
-    textSize(25);
-    fill(255);
-    text(name, x,y+10);
-  }
-  
-  void myMousePressed(){
-    if(overBox) { 
-      draggable = true;
-    } else {
-      draggable = false;
-    }
-    xOffset = mouseX-x; 
-    yOffset = mouseY-y; 
-  }
-  
-  void myMouseDragged(){
-    if(draggable && !locked) {
-      x = mouseX-xOffset; 
-      y = mouseY-yOffset; 
-    }
-  }
-  
-  void myMouseReleased(){
-    draggable = false;
-    boolean flag = true;
-    for(int i = 0; i < areas.size() && flag && !locked; i++){
-      int[] area = areas.get(i);
-      if(x > area[0] && x < area[1] && 
-         y > area[2] && y < area[3]){
-         x = (area[0] + area[1]) / 2;
-         y = (area[2] + area[3]) / 2;
-         flag = false;
-      }
-    }
   }
 }

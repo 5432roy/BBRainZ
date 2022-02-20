@@ -4,42 +4,46 @@ import java.util.Collections;
 public class Planner {
 
     // Array lists for each categories
-    private ArrayList<Course> prevCourse;
-    private ArrayList<Course> currCourse;
-    private ArrayList<Course> futureCourse;
-    private ArrayList<Course> preReqMet ;
+    private ArrayList<Course> takingCourses;
+    private ArrayList<Course> preReqMet;
     private ArrayList<Course> preReqNotMet;
 
     public Planner(){
-        this.prevCourse = new ArrayList<>();
-        this.currCourse = new ArrayList<>();
-        this.futureCourse = new ArrayList<>();
+        this.takingCourses = new ArrayList<>();
         this.preReqMet = new ArrayList<>();
         this.preReqNotMet = new ArrayList<>();
     }
 
-    public void addPrevCourse(Course newCourse){
-        prevCourse.add(newCourse);
+    public void addTakingCourse(Course newCourse){
+        takingCourses.add(newCourse);
     }
     
-    public void addCurrCourse(Course newCourse){
-        currCourse.add(newCourse);
-    }
-    
-    private void addPreReqMet(Course newCourse){
+    public void addPreReqMet(Course newCourse){
         preReqMet.add(newCourse);
     }
     
-    private void addPreReqNotMet(Course newCourse){
+    public void addPreReqNotMet(Course newCourse){
         preReqNotMet.add(newCourse);
+    }
+    
+    public void removeTakingCourse(Course newCourse){
+        takingCourses.remove(newCourse);
+    }
+    
+    public void removePreReqMet(Course newCourse){
+        preReqMet.remove(newCourse);
+    }
+    
+    public void removePreReqNotMet(Course newCourse){
+        preReqNotMet.remove(newCourse);
     }
     
     public ArrayList<Boolean> preReqsMet(Course course){
         ArrayList<Boolean> temp = new ArrayList<>();
-        for(ArrayList<Course> preReqList : course.getPreReqs()){
+        for(ArrayList<Integer> preReqList : course.getPreReqs()){
             Boolean flag = false;
-            for(Course preReq: preReqList){
-                if(prevCourse.contains(preReq) || currCourse.contains(preReq)){
+            for(int preReq: preReqList){
+                if(takingCourses.contains(preReq)){
                      flag = true;
                 }
             }
@@ -58,41 +62,8 @@ public class Planner {
         }
     }
 
-    public void moveCourse(String from, String to, Course course){
-        if(from.equals("future")){
-            futureCourse.remove(course);
-        }
-        else if(from.equals("met")){
-            preReqMet.remove(course);
-        }
-        else if(from.equals("notMet")){
-            preReqNotMet.remove(course);
-        }
-        
-        if(to.equals("future")){
-            futureCourse.add(course);
-            Collections.sort(futureCourse);
-        }
-        else if(to.equals("met")){
-            preReqMet.add(course);
-            Collections.sort(preReqMet);
-        }
-        else if(to.equals("notMet")){
-            preReqNotMet.add(course);
-            Collections.sort(preReqNotMet);
-        }
-    }
-
-    public ArrayList<Course> getPrevCourse() {
-        return prevCourse;
-    }
-
-    public ArrayList<Course> getCurrCourse() {
-        return currCourse;
-    }
-
-    public ArrayList<Course> getFutureCourse() {
-        return futureCourse;
+    public ArrayList<Course> getTakingCourses() {
+        return takingCourses;
     }
 
     public ArrayList<Course> getPreReqMet() {

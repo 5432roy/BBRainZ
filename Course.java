@@ -36,4 +36,9 @@ public class Course implements Comparable {
         }
     }
 
+    public String toString(){
+        return fullName;
+
+    }
+
 }

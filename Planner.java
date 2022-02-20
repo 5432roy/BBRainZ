@@ -21,12 +21,12 @@ public class Planner {
         this.preReqNotMet = preReqNotMet;
     }
 
-    public void addCourse(ArrayList <String> courseType, String courseName){
+    public void addCourse(ArrayList <Courses> courseType, String courseName){
         // Add the course to an arraylist
         courseType.add(courseName);
     }
 
-    public void moveCourse(ArrayList <String> courseType, String courseName, ArrayList <String> toCourse){
+    public void moveCourse(ArrayList <Courses> courseType, String courseName, ArrayList <Courses> toCourse){
         // Move a course from an arraylist to another arraylist
         courseType.remove(courseName);
         toCourse.add(courseName);

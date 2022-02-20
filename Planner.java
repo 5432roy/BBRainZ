@@ -4,15 +4,15 @@ import java.util.Collections;
 public class Planner {
 
     // Array lists for each categories
-    private final ArrayList <String> prevCourse ;
-    private final ArrayList <String> currCourse;
-    private final ArrayList <String> futureCourse;
-    private final ArrayList <String> preReqMet ;
-    private final ArrayList <String> preReqNotMet;
+    private final ArrayList <Courses> prevCourse ;
+    private final ArrayList <Courses> currCourse;
+    private final ArrayList <Courses> futureCourse;
+    private final ArrayList <Courses> preReqMet ;
+    private final ArrayList <Courses> preReqNotMet;
 
-    public Planner (ArrayList<String> prevCourse, ArrayList<String> currCourse,
-                    ArrayList <String> futureCourse, ArrayList<String> preReqMet,
-                    ArrayList<String> preReqNotMet){
+    public Planner (ArrayList<Courses> prevCourse, ArrayList<Courses> currCourse,
+                    ArrayList <Courses> futureCourse, ArrayList<Courses> preReqMet,
+                    ArrayList<Courses> preReqNotMet){
 
         this.prevCourse = prevCourse;
         this.currCourse = currCourse;
@@ -32,23 +32,23 @@ public class Planner {
         toCourse.add(courseName);
     }
 
-    public ArrayList<String> getPrevCourse() {
+    public ArrayList<Courses> getPrevCourse() {
         return prevCourse;
     }
 
-    public ArrayList<String> getCurrCourse() {
+    public ArrayList<Courses> getCurrCourse() {
         return currCourse;
     }
 
-    public ArrayList<String> getFutureCourse() {
+    public ArrayList<Courses> getFutureCourse() {
         return futureCourse;
     }
 
-    public ArrayList<String> getPreReqMet() {
+    public ArrayList<Courses> getPreReqMet() {
         return preReqMet;
     }
 
-    public ArrayList<String> getPreReqNotMet() {
+    public ArrayList<Courses> getPreReqNotMet() {
         return preReqNotMet;
     }
 
@@ -61,7 +61,7 @@ public class Planner {
 
 
     // Sort the arraylist
-    public void sort(ArrayList<String> courseType) {
+    public void sort(ArrayList<Courses> courseType) {
         Collections.sort(courseType);
     }
 }

@@ -12,6 +12,7 @@ public class Box{
   private float yOffset;
   private color boxColor1;
   private color boxColor2;
+  private int timer;
   
   Box(String name, Course course, boolean locked, color boxColor1, color boxColor2){
     this.name = name;
@@ -26,6 +27,7 @@ public class Box{
     this.yOffset = 0.0;
     this.boxColor1 = boxColor1;
     this.boxColor2 = boxColor2;
+    this.timer = 0;
   }
   
   public void setCoord(float newX, float newY){
@@ -49,11 +51,13 @@ public class Box{
     // Test if the cursor is over the box 
     if (mouseX > x-boxSizeX && mouseX < x+boxSizeX && 
         mouseY > y-boxSizeY && mouseY < y+boxSizeY) {
-      overBox = true;  
+      overBox = true;
+      timer ++;
       stroke(255); 
     } else {
       stroke(boxColor2);
       overBox = false;
+      timer = 0;
     }
     
     // Draw the box
@@ -63,9 +67,6 @@ public class Box{
     textSize(22);
     fill(255);
     text(name, x,y+10);
-  }
-  
-  public void myMouseClicked(){
     
   }
   
@@ -116,7 +117,38 @@ public class Box{
          removable = true;
       }
     }
-    
-    
+  }
+  
+  public void popup(){
+    if(timer >= 60 && !draggable){
+      noStroke();
+      fill(220);
+      rect(x+200, y, 120, 120, 20);
+      textSize(35);
+      fill(0);
+      text("Pre-requisites:", x+200, y-70);
+      textSize(25);
+      int i = -30;
+      for(ArrayList<Integer> prereqs : course.getPreReqs()){
+        fill(0);
+        text("CPT S ", x+120, y+i);
+        for(int j = 0; j < prereqs.size(); j++){
+          if(j > 0){
+            textSize(20);
+            fill(0);
+            text("or", x + 150 + (60 * j), y + i);
+          }
+          if(myContains(prereqs.get(j))){
+            fill(0, 200, 0);
+          }
+          else{
+            fill(255, 0, 0);
+          }
+          textSize(25);
+          text(prereqs.get(j), x + 180 + (60 * j), y + i);
+        }
+        i += 40;
+      }
+    }
   }
 }

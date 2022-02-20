@@ -285,14 +285,12 @@ void draw() {
   for(Box box:boxes){
     box.display();
   }
+  for(Box box:boxes){
+    box.popup();
+  }
   
 }
-void mouseClicked(){
-  for(Box box:boxes){
-    if(box.getOver())
-      box.myMouseClicked();
-  }
-}
+
 void mousePressed(){
   for(Box box:boxes){
     if(box.getOver())

@@ -6,9 +6,9 @@ public class Course implements Comparable {
     private String abbrevName;
     private String fullName;
     private int number;
-    private ArrayList<Course> preReqs;
+    private ArrayList<ArrayList<Course>> preReqs;
 
-    public Course(String abbrevName, String fullName, int number, ArrayList<Course> preReqs){
+    public Course(String abbrevName, String fullName, int number, ArrayList<ArrayList<Course>> preReqs){
         this.abbrevName = abbrevName;
         this.fullName = fullName;
         this.number = number;
@@ -27,7 +27,7 @@ public class Course implements Comparable {
         return fullName;
     }
     
-    public ArrayList<Course> getPreReqs(){
+    public ArrayList<ArrayList<Course>> getPreReqs(){
         return preReqs;
     }
 

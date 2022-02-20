@@ -36,13 +36,14 @@ public class Planner {
     
     public ArrayList<Boolean> preReqsMet(Course course){
         ArrayList<Boolean> temp = new ArrayList<>();
-        for(Course preReq : course.getPreReqs()){
-            if(prevCourse.contains(preReq) || currCourse.contains(preReq)){
-                temp.add(true);
+        for(ArrayList<Course> preReqList : course.getPreReqs()){
+            Boolean flag = false;
+            for(Course preReq: preReqList){
+                if(prevCourse.contains(preReq) || currCourse.contains(preReq)){
+                     flag = true;
+                }
             }
-            else{
-                temp.add(false);
-            }
+            temp.add(flag);
         }
         return temp;
     }

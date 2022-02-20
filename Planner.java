@@ -4,12 +4,22 @@ import java.util.Collections;
 public class Planner {
 
     // Array lists for each categories
-    private final ArrayList <Courses> prevCourse ;
-    private final ArrayList <Courses> currCourse;
-    private final ArrayList <Courses> futureCourse;
-    private final ArrayList <Courses> preReqMet ;
-    private final ArrayList <Courses> preReqNotMet;
+    private ArrayList <Courses> prevCourse;
+    private ArrayList <Courses> currCourse;
+    private ArrayList <Courses> futureCourse;
+    private ArrayList <Courses> preReqMet ;
+    private ArrayList <Courses> preReqNotMet;
 
+    // Constructor
+    public void Plan(){
+        this.prevCourse = null;
+        this.currCourse = null;
+        this.futureCourse = null;
+        this.preReqMet = null;
+        this.preReqNotMet = null;
+
+
+    }
     public Planner (ArrayList<Courses> prevCourse, ArrayList<Courses> currCourse,
                     ArrayList <Courses> futureCourse, ArrayList<Courses> preReqMet,
                     ArrayList<Courses> preReqNotMet){
@@ -21,12 +31,12 @@ public class Planner {
         this.preReqNotMet = preReqNotMet;
     }
 
-    public void addCourse(ArrayList <Courses> courseType, String courseName){
+    public void addCourse(ArrayList<String> courseType, String courseName){
         // Add the course to an arraylist
         courseType.add(courseName);
     }
 
-    public void moveCourse(ArrayList <Courses> courseType, String courseName, ArrayList <Courses> toCourse){
+    public void moveCourse(ArrayList <Courses> courseType, String courseName, ArrayList<String> toCourse){
         // Move a course from an arraylist to another arraylist
         courseType.remove(courseName);
         toCourse.add(courseName);

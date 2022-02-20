@@ -3,13 +3,12 @@ import java.util.ArrayList;
 
 public class Course implements Comparable {
 
-    private String abbrevName;
+
     private String fullName;
     private int number;
-    private ArrayList<ArrayList<Course>> preReqs;
+    private ArrayList<Integer> preReqs;
 
-    public Course(String abbrevName, String fullName, int number, ArrayList<ArrayList<Course>> preReqs){
-        this.abbrevName = abbrevName;
+    public Course(int number, String fullName, ArrayList<Integer>preReqs){
         this.fullName = fullName;
         this.number = number;
         this.preReqs = preReqs;
@@ -19,15 +18,11 @@ public class Course implements Comparable {
         return number;
     }
 
-    public String getAbbrevName(){
-        return abbrevName;
-    }
-    
     public String getFullName(){
         return fullName;
     }
     
-    public ArrayList<ArrayList<Course>> getPreReqs(){
+    public ArrayList<Integer> getPreReqs(){
         return preReqs;
     }
 
